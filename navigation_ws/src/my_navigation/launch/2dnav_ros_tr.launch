@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot" default="cob4"/>
+  <arg name="pkg_nav_config" default="$(find my_navigation)"/>
+
+  <!--- Run move base -->
+  <include file="$(find my_navigation)/launch/2dnav_ros_tr.xml" >
+    <arg name="robot" value="$(arg robot)"/>
+    <arg name="pkg_nav_config" value="$(arg pkg_nav_config)"/>
+  </include>
+
+</launch>

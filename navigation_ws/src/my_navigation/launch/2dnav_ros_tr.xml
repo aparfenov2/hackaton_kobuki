@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot"/>
+  <arg name="pkg_nav_config" default="$(find my_navigation)"/>
+  <arg name="odom_topic" default="odom" />
+  <arg name="laser_topic" default="scan" />
+
+  <include file="$(find my_navigation)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find my_navigation)/launch/includes/safety_controller.launch.xml"/>
+
+  <!--delete old parameters -->
+  <rosparam command="delete" param="/move_base"/>
+
+  <!--- Run move base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+    <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg laser_topic)"/>
+
+    <param name="controller_frequency" value="12"/>
+
+    <!--- load common configuration files -->
+    <rosparam file="$(arg pkg_nav_config)/robots/$(arg robot)/nav/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(arg pkg_nav_config)/robots/$(arg robot)/nav/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+    <!--- load local navigation specific parameters -->
+    <rosparam file="$(find my_navigation)/config/local_costmap_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find my_navigation)/config/global_costmap_params.yaml" command="load" ns="global_costmap" />
+
+    <!--- load planner parameters -->
+    <rosparam file="$(arg pkg_nav_config)/robots/$(arg robot)/nav/base_local_planner_params.yaml" command="load" />
+  </node>
+
+</launch>
