@@ -1,0 +1,27 @@
+<launch>
+
+  <include file="$(find my_nav)/launch/velocity_smoother.launch.xml"/>
+<!--
+  <include file="$(find my_nav)/launch/safety_controller.launch.xml"/>
+-->
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+  <rosparam file="$(find my_nav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+  <rosparam file="$(find my_nav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+  <rosparam file="$(find my_nav)/params/map_nav_params/global_costmap_params.yaml" command="load" />
+  <rosparam file="$(find my_nav)/params/map_nav_params/local_costmap_params.yaml" command="load" />
+
+  <rosparam file="$(find my_nav)/params/base_local_planner_params.yaml" command="load" />
+  <rosparam file="$(find my_nav)/params/move_base_params.yaml" command="load" />
+
+  <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+  <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+<!--
+  <remap from="cmd_vel" to="/mobile_base/commands/velocity"/>
+-->
+  <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+  <remap from="odom" to="laser_odom_to_init" />
+ </node>
+
+</launch>

@@ -1,0 +1,28 @@
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="laser" args="0 0 0.2 0 0 0 1 base_link laser 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="camera_link" args="0 0 0.458  0, 0.492, 0   base_link camera_link 100"/>
+
+
+    <!-- Construct point cloud of the rgb and depth topics -->
+    <node name="republish_rgb" type="republish" pkg="image_transport" args="compressed in:=camera/rgb/image_raw raw out:=camera/repub/rgb/image_raw" />
+    <node name="republish_depth" type="republish" pkg="image_transport" args="compressed in:=camera/depth/image_raw raw out:=camera/repub/depth/image_raw" />
+    <node name="republish_depth_r" type="republish" pkg="image_transport" args="compressed in:=camera/depth_registered/image_raw raw out:=camera/repub/depth_registered/image_raw" />
+<!--
+
+    <node pkg="tf" type="static_transform_publisher" name="camera_link" args="0 0 0.2  -1.590, -0.000, -1.590   base_link camera_link 100"/>
+    <node pkg="nodelet" type="nodelet" name="rgbd2xyz_nodelet" args="manager" output="screen"/>
+    <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="load depth_image_proc/point_cloud_xyzrgb standalone_nodelet -s-no-bond">
+        <remap from="rgb/camera_info" to="/camera/rgb/camera_info" />
+        <remap from="rgb/image_rect_color" to="/camera/rgb/image_rect_color" />
+        <remap from="depth_registered/image_rect" to="/camera/depth_registered/image_raw" />
+        <remap from="depth_registered/points" to="/camera/rgbd/points"/>
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="laser_frame" args="0 0 0.2 0 0 0 1 base_link laser_frame 100"/>
+
+        <remap from="rgb/camera_info" to="/camera/rgb/camera_info" />
+        <remap from="rgb/image_rect_color" to="/camera/rgb/image_raw" />
+        <remap from="depth_registered/image_rect" to="/camera/depth/image_raw" />
+        <remap from="depth_registered/points" to="/camera/rgbd/points"/>
+-->
+</launch>

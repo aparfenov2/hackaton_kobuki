@@ -1,0 +1,1 @@
+/home/usr/tasks/starline/study/diy_driverless_car_ROS/rover_cv/lane_detection/src/lane_detection/outer_lane_detection.py

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find movie_publisher)/movie_publisher.launch">
+        <arg name="movie_file" default="$(find my_nav)/video/VID_20200326_114405.mp4"/>
+        <arg name="loop" default="true"/>
+    </include>
+</launch>
