@@ -10,6 +10,11 @@
   <xacro:include filename="$(find tb_gazebo_description)/urdf/kobuki.urdf.xacro" />
   <xacro:include filename="$(find tb_gazebo_description)/urdf/stacks/hexagons.urdf.xacro"/>
   <xacro:include filename="$(find tb_gazebo_description)/urdf/sensors/kinect.urdf.xacro"/>
+
+  <xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro" />
+  <xacro:hokuyo_utm30lx name="laser" parent="base_link" ros_topic="scan" update_rate="40" ray_count="1040" min_angle="180" max_angle="-180">
+    <origin xyz="0.00 0.00 0.20" rpy="0 0 0"/>
+  </xacro:hokuyo_utm30lx>
   
   <kobuki/>
   <stack_hexagons parent="base_link"/>

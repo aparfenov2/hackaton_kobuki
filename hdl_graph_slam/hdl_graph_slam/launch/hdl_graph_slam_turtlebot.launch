@@ -3,7 +3,7 @@
   <!-- arguments -->
   <arg name="nodelet_manager" default="velodyne_nodelet_manager" />
   <arg name="enable_floor_detection" default="true" />
-  <arg name="points_topic" default="/camera/depth/points" />
+  <arg name="points_topic" default="/camera/depth_registered/points" />
 
   <!-- in case you use velodyne_driver, comment out the following line -->
   <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager)" args="manager" output="screen"/>
@@ -45,10 +45,10 @@
 
     <param name="h_lo" value="0" />
     <param name="s_lo" value="0" />
-    <param name="v_lo" value="128" /><!-- 168-->
+    <param name="v_lo" value="135" /><!-- 168-->
 
-    <param name="h_hi" value="172" />
-    <param name="s_hi" value="111" />
+    <param name="h_hi" value="46" />
+    <param name="s_hi" value="103" />
     <param name="v_hi" value="255" />
   </node>
 

@@ -22,6 +22,7 @@
     <param name="publish_frequency" type="double" value="30.0" />
   </node>
 
+  <node name="imu_relay" type="relay" pkg="topic_tools" args="/mobile_base/sensors/imu_data /mobile_base/sensors/imu_data_raw" />
 
   <!-- Fake laser -->
   <!-- <node pkg="nodelet" type="nodelet" name="laserscan_nodelet_manager" args="manager"/>
