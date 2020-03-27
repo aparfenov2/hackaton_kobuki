@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- arguments -->
+  <arg name="nodelet_manager" default="velodyne_nodelet_manager" />
+  <arg name="enable_floor_detection" default="true" />
+  <arg name="points_topic" default="/camera/depth/points" />
+
+  <!-- in case you use velodyne_driver, comment out the following line -->
+  <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager)" args="manager" output="screen"/>
+
+  <!-- prefiltering_nodelet -->
+  <node pkg="nodelet" type="nodelet" name="prefiltering_nodelet" args="load hdl_graph_slam/PrefilteringNodelet $(arg nodelet_manager)">
+    <remap from="/velodyne_points" to="$(arg points_topic)" />
+    <!-- in case base_link_frame is blank, mapping will be performed in the lidar frame -->
+    <param name="base_link_frame" value="base_link" />
+    <!-- distance filter -->
+    <param name="use_distance_filter" value="true" />
+    <param name="distance_near_thresh" value="0.1" />
+    <param name="distance_far_thresh" value="100.0" />
+    <!-- NONE, VOXELGRID, or APPROX_VOXELGRID -->
+    <param name="downsample_method" value="VOXELGRID" />
+    <param name="downsample_resolution" value="0.05" />
+    <!-- NONE, RADIUS, or STATISTICAL -->
+    <param name="outlier_removal_method" value="RADIUS" />
+    <param name="statistical_mean_k" value="30" />
+    <param name="statistical_stddev" value="1.2" />
+    <param name="radius_radius" value="0.5" />
+    <param name="radius_min_neighbors" value="2" />
+  </node>
+
+  <!-- floor_detection_nodelet -->
+  <node pkg="nodelet" type="nodelet" name="floor_detection_nodelet" args="load hdl_graph_slam/FloorDetectionNodelet $(arg nodelet_manager)" if="$(arg enable_floor_detection)">
+<!--    
+    <remap from="filtered_points" to="$(arg points_topic)"/>
+-->
+    <param name="tilt_deg" value="0.0" />
+    <param name="sensor_height" value="0.2" /> <!-- HDL-32E -->
+    <param name="height_clip_range" value="3.0" />
+    <param name="floor_pts_thresh" value="512" />
+    <param name="use_normal_filtering" value="false" />
+    <param name="normal_filter_thresh" value="20.0" />
+
+    <param name="thd_filtered" value="0.1" />
+    <param name="thd_inliers" value="0.1" />
+
+    <param name="h_lo" value="0" />
+    <param name="s_lo" value="0" />
+    <param name="v_lo" value="128" /><!-- 168-->
+
+    <param name="h_hi" value="172" />
+    <param name="s_hi" value="111" />
+    <param name="v_hi" value="255" />
+  </node>
+
+
+<node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_node" output="screen" >
+    <remap from="cloud_in" to="/floor_detection/lines" />
+    <remap from="scan" to="scan_lines" />
+    <param name="max_height" value="1.0" />
+    <param name="min_height" value="0.0" />
+    <param name="angle_max" value="3.14" />
+    <param name="angle_min" value="-3.14" />
+    <param name="range_min" value="0.1" />
+    <param name="range_max" value="4.0" />
+    <param name="use_inf" value="true" />
+</node>
+
+</launch>
