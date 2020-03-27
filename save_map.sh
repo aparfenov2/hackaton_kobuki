@@ -1,0 +1,1 @@
+rosrun map_server map_saver -f nav_ws/src/my_nav/map/mymap

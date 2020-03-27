@@ -1,0 +1,1 @@
+/home/usr/tasks/starline/try_cartographer/run_cartographer_slam.sh
